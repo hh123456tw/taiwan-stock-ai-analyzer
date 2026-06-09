@@ -1,0 +1,20 @@
+# 台股分析 Bot Crontab 範例
+# 使用指令: crontab -e 然後貼上需要的行
+
+# 1. 確保 Bot 持續運行 (每15分鐘檢查一次)
+*/15 * * * * /usr/bin/pgrep -f "tg_bot_final_fixed.py" > /dev/null || (cd /home/aibot/taiwan-stock-old && /usr/bin/nohup /usr/bin/python3 tg_bot_final_fixed.py > logs/bot_$(date +%Y%m%d).log 2>&1 &)
+
+# 2. 每日早上8點重啟 Bot (台股開盤前)
+0 8 * * * /usr/bin/pkill -f "tg_bot_final_fixed.py"; sleep 5; cd /home/aibot/taiwan-stock-old && /usr/bin/nohup /usr/bin/python3 tg_bot_final_fixed.py > logs/bot_$(date +%Y%m%d).log 2>&1 &
+
+# 3. 每日清理舊日誌 (保留7天)
+0 2 * * * /usr/bin/find /home/aibot/taiwan-stock-old/logs/ -name "*.log" -mtime +7 -delete
+
+# 4. 週日凌晨完整重啟 (清理記憶體)
+0 1 * * 0 /usr/bin/pkill -f "tg_bot_final_fixed.py"; sleep 10; cd /home/aibot/taiwan-stock-old && /usr/bin/nohup /usr/bin/python3 tg_bot_final_fixed.py > logs/bot_$(date +%Y%m%d).log 2>&1 &
+
+# 5. 每小時檢查 Bot 狀態 (簡化版)
+0 * * * * /usr/bin/pgrep -f "tg_bot_final_fixed.py" > /dev/null || echo "$(date): Bot 異常停止" >> /home/aibot/taiwan-stock-old/logs/monitor.log
+
+# 選擇性: 預熱美股數據 (台股開盤前)
+25 8 * * * cd /home/aibot/taiwan-stock-old && /usr/bin/python3 -c "from cross_market_predictor import cross_market_predictor; cross_market_predictor.get_us_leading_indicators(30)" >> logs/warmup.log 2>&1

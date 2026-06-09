@@ -1,0 +1,26 @@
+[Unit]
+Description=台股自動分析系統 - 盤後盤前分析推送
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aibot
+Group=aibot
+WorkingDirectory=/mnt/nvme/taiwan-stock-ai-analyzer-main
+ExecStart=/usr/bin/python3 /mnt/nvme/taiwan-stock-ai-analyzer-main/台股盤後盤前自動分析系統_2025-07-31.py --schedule
+Restart=always
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+
+# 環境變數
+Environment=PYTHONPATH=/mnt/nvme/taiwan-stock-ai-analyzer-main:/mnt/nvme/taiwan-stock-ai-analyzer-main/realtime_trading_system
+Environment=TZ=Asia/Taipei
+
+# 限制資源使用
+MemoryMax=1G
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target

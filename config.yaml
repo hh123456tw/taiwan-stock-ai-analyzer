@@ -1,0 +1,69 @@
+# 台股分析機器人配置檔案
+bot:
+  token: ${BOT_TOKEN}  # 從環境變數讀取
+  debug_mode: false
+  max_retry: 3
+  timeout: 30
+
+database:
+  type: "sqlite"  # 可改為 postgresql 或 mysql
+  path: "data/stock_bot.db"
+  pool_size: 10
+
+models:
+  lstm:
+    sequence_length: 30
+    epochs: 50
+    batch_size: 32
+    validation_split: 0.2
+    features: ['close', 'volume', 'rsi', 'ma5_ratio']
+  
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+
+data:
+  cache_timeout: 300  # 5分鐘快取
+  max_history_days: 365
+  min_data_points: 30
+  
+api:
+  ollama:
+    base_url: "${OLLAMA_BASE_URL}"
+    model: "${OLLAMA_MODEL}"
+    timeout: "${OLLAMA_TIMEOUT}"
+  
+  stock_api:
+    retry_count: 3
+    timeout: 10
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/stock_bot.log"
+  max_size: "10MB"
+  backup_count: 5
+
+features:
+  enable_lstm: true
+  enable_rf: true
+  enable_xgb: true
+  enable_ai_analysis: true
+  enable_cache: true
+  enable_user_tracking: false
+
+ui:
+  response_timeout: 30
+  max_message_length: 4000
+  pagination_size: 10
+  
+performance:
+  max_concurrent_predictions: 3
+  model_cache_size: 100
+  data_cache_size: 1000

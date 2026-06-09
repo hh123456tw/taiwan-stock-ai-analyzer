@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 虛擬環境
+venv/
+env/
+.venv/
+
+# 訓練好的模型（檔案太大，不進 repo）
+models/*.pkl
+models/*.h5
+models/*.joblib
+models/*.pt
+models/*.pth
+models/*.keras
+
+# 資料庫
+*.db
+*.sqlite
+*.sqlite3
+
+# 日誌
+logs/
+*.log
+
+# 資料暫存
+data/
+results/
+
+# 環境設定（含敏感資訊）
+.env
+config.local.yaml
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
