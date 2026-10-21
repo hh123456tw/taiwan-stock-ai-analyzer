@@ -18,8 +18,8 @@ class EnhancedRealPostMarketAnalyzer:
     """增強版實時盤後分析器"""
     
     def __init__(self):
-        self.predictions_db = '/mnt/nvme/taiwan-stock-ai-analyzer-main/predictions.db'
-        self.stock_db = '/mnt/nvme/taiwan-stock-ai-analyzer-main/data/jiansoft_daily.db'
+        self.predictions_db = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'predictions.db')
+        self.stock_db = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'jiansoft_daily.db')
         
         # 核心股票池 (基於實時交易系統)
         self.core_stocks = [
@@ -338,10 +338,12 @@ async def send_post_market_to_telegram(analyzer) -> bool:
     """發送盤後分析到TG"""
     try:
         import os
-        os.environ['TRADING_NOTIFICATION_BOT_TOKEN'] = "8254456120:AAF3_zbTKRQBtjHAwCwRbYqQ786kgu7TUmg"
-        os.environ['TRADING_NOTIFICATION_CHAT_ID'] = "-4958321055"
+        bot_token = os.environ.get("TRADING_NOTIFICATION_BOT_TOKEN") or os.environ.get("TG_BOT_TOKEN")
+        chat_id = os.environ.get("TRADING_NOTIFICATION_CHAT_ID") or os.environ.get("TG_CHAT_ID")
         
-        from ai_trading_notification_bot import AITradingNotificationBot
+        if not bot_token or not chat_id:
+            print("⚠️ 未配置 TG_BOT_TOKEN 或 TG_CHAT_ID，略過 TG 訊息推送")
+            return False
         
         # 獲取分析數據
         predictions_df = analyzer.get_ai_predictions_with_real_prices()
@@ -386,9 +388,32 @@ async def send_post_market_to_telegram(analyzer) -> bool:
             'strategy': strategy
         }
         
-        bot = AITradingNotificationBot()
-        success = await bot.send_trading_alert('post_market', data)
-        return success
+        try:
+            from telegram import Bot
+            bot = Bot(token=bot_token)
+            msg_text = (
+                f"📊 【台股盤後AI總結】 {data['date']}\n"
+                f"📈 加權指數: {data['taiex_value']} ({data['taiex_change']}) | 成交量: {data['volume']}億\n"
+                f"🎯 明日重點關注: {data['tomorrow_focus']}\n"
+                f"🏆 最強類股: {data['best_sector']} | 弱勢類股: {data['worst_sector']}\n"
+                f"💡 策略建議: {data['strategy']}\n"
+                f"✨ 高信心度推薦數: {data['high_confidence_count']} 檔"
+            )
+            await bot.send_message(chat_id=chat_id, text=msg_text)
+            return True
+        except ImportError:
+            import requests
+            api_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            msg_text = (
+                f"📊 【台股盤後AI總結】 {data['date']}\n"
+                f"📈 加權指數: {data['taiex_value']} ({data['taiex_change']}) | 成交量: {data['volume']}億\n"
+                f"🎯 明日重點關注: {data['tomorrow_focus']}\n"
+                f"🏆 最強類股: {data['best_sector']} | 弱勢類股: {data['worst_sector']}\n"
+                f"💡 策略建議: {data['strategy']}\n"
+                f"✨ 高信心度推薦數: {data['high_confidence_count']} 檔"
+            )
+            resp = requests.post(api_url, json={"chat_id": chat_id, "text": msg_text}, timeout=10)
+            return resp.status_code == 200
         
     except Exception as e:
         print(f"❌ TG推送失敗: {e}")

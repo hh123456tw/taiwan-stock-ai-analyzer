@@ -16,7 +16,7 @@ class PreMarketAnalyzer:
     """盤前市場分析器"""
     
     def __init__(self):
-        self.predictions_db = '/mnt/nvme/taiwan-stock-ai-analyzer-main/predictions.db'
+        self.predictions_db = './predictions.db'
         self.core_stocks = ['2330', '2317', '2454', '0056', '00878', '00881']
         
     def get_us_market_data(self) -> Dict:

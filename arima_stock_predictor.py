@@ -480,8 +480,8 @@ if __name__ == "__main__":
         
         try:
             # 導入數據獲取功能
-            sys.path.append('/mnt/nvme/taiwan-stock-ai-analyzer-main')
-            from data_fetcher import DataFetcher
+            sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+            # from data_fetcher import DataFetcher
             
             # 使用統一數據管理器獲取資料
             from unified_data_manager import UnifiedDataManager
@@ -506,7 +506,7 @@ if __name__ == "__main__":
             
             if train_result['success']:
                 # 保存模型
-                models_dir = '/mnt/nvme/taiwan-stock-ai-analyzer-main/models/arima'
+                models_dir = './models/arima'
                 os.makedirs(models_dir, exist_ok=True)
                 
                 model_file = os.path.join(models_dir, f"{args.symbol}_arima_model.pkl")
@@ -541,7 +541,7 @@ if __name__ == "__main__":
         print(f"🔮 使用 {args.symbol} ARIMA模型預測...")
         
         try:
-            models_dir = '/mnt/nvme/taiwan-stock-ai-analyzer-main/models/arima'
+            models_dir = './models/arima'
             model_file = os.path.join(models_dir, f"{args.symbol}_arima_model.pkl")
             
             if not os.path.exists(model_file):

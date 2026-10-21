@@ -18,7 +18,7 @@ class SmartStockScreener:
         self.stock_pool = {
             'high_price': ['2330.TW', '2454.TW', '3008.TW', '6166.TW'],  # 高價股 >500 (含凌華)
             'mid_price': ['2317.TW', '2308.TW', '2303.TW', '1301.TW', '1303.TW'],  # 中價股 100-500
-            'low_price': ['2891.TW', '2881.TW', '2882.TW', '2886.TW', '2887.TW', '2888.TW'],  # 低價股 <100
+            'low_price': ['2891.TW', '2881.TW', '2882.TW', '2886.TW', '2887.TW', '2884.TW'],  # 低價股 <100
             'etf': ['0050.TW', '0056.TW', '00878.TW', '00891.TW', '00927.TW']  # ETF
         }
         self.all_stocks = []

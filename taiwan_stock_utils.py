@@ -1,8 +1,27 @@
-#\!/usr/bin/env python3
+#!/usr/bin/env python3
 """
-台股交易基本函數庫
+台股交易基本函數庫與跨平台路徑解析
 重要：這些函數基於台股 1張 = 1000股 的基本規則
 """
+import os
+import sys
+from pathlib import Path
+
+# 跨平台統一專案根目錄解析 (解決任何環境與路徑寫死問題)
+PROJECT_ROOT = Path(__file__).resolve().parent
+DATA_DIR = PROJECT_ROOT / "data"
+MODELS_DIR = PROJECT_ROOT / "models"
+LOGS_DIR = PROJECT_ROOT / "logs"
+REPORTS_DIR = PROJECT_ROOT / "reports"
+PREDICTIONS_DB = PROJECT_ROOT / "predictions.db"
+
+# 自動注入根目錄至 sys.path
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+def get_project_root() -> Path:
+    """獲取專案根目錄路徑"""
+    return PROJECT_ROOT
 
 def taiwan_stock_affordability_check(stock_price, available_cash):
     """

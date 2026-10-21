@@ -38,7 +38,9 @@ logger = logging.getLogger(__name__)
 class AutoStockTrainingSystem:
     """大規模股票池自動訓練系統"""
     
-    def __init__(self, base_dir: str = "/mnt/nvme/taiwan-stock-ai-analyzer-main"):
+    def __init__(self, base_dir: str = None):
+        if base_dir is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
         self.base_dir = base_dir
         self.models_dir = os.path.join(base_dir, "models")
         self.db_path = os.path.join(base_dir, "predictions.db")

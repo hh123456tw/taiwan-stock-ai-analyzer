@@ -82,7 +82,7 @@ class UltimateTradingSystem:
     def _load_stock_config(self) -> Dict:
         """載入股票分類配置"""
         try:
-            config_path = '/mnt/nvme/taiwan-stock-ai-analyzer-main/stock_pool_config_enhanced.json'
+            config_path = './stock_pool_config_enhanced.json'
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = json.load(f)
                 

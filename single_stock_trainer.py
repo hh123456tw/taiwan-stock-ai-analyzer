@@ -7,7 +7,7 @@ import sys
 import os
 
 # 確保能導入現有模組
-sys.path.append('/mnt/nvme/taiwan-stock-ai-analyzer-main')
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def train_single_stock(stock_code):
     """訓練單一股票的所有模型"""

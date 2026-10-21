@@ -11,7 +11,9 @@ from datetime import datetime, timedelta
 import numpy as np
 
 class PredictionValidator:
-    def __init__(self, db_path='/mnt/nvme/taiwan-stock-ai-analyzer-main/predictions.db'):
+    def __init__(self, db_path=None):
+        if db_path is None:
+            db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'predictions.db')
         self.db_path = db_path
         
     def get_actual_price(self, symbol, date):
@@ -250,8 +252,8 @@ def main():
         
         # 保存報告
         import os
-        os.makedirs("/home/aibot/taiwan-stock/results/backtest", exist_ok=True)
-        report_file = "/home/aibot/taiwan-stock/results/backtest/prediction_validation_report.txt"
+        os.makedirs("./results/backtest", exist_ok=True)
+        report_file = "./results/backtest/prediction_validation_report.txt"
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report)
         

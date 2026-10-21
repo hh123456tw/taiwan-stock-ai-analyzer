@@ -26,7 +26,9 @@ logger = logging.getLogger(__name__)
 class StockPoolManager:
     """股票池管理器"""
     
-    def __init__(self, base_dir: str = "/mnt/nvme/taiwan-stock-ai-analyzer-main"):
+    def __init__(self, base_dir: str = None):
+        if base_dir is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
         self.base_dir = base_dir
         self.models_dir = os.path.join(base_dir, "models")
         self.config_file = os.path.join(base_dir, "stock_pool_config.json")

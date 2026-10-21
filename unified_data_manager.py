@@ -21,9 +21,9 @@ class UnifiedDataManager:
     """統一數據管理器 - 所有模組的標準數據源"""
     
     def __init__(self, db_path: str = None):
-        self.db_path = db_path or '/mnt/nvme/taiwan-stock-ai-analyzer-main/data/unified_stock_data.db'
-        self.predictions_db = '/mnt/nvme/taiwan-stock-ai-analyzer-main/predictions.db'
-        self.stock_pool_path = '/mnt/nvme/taiwan-stock-ai-analyzer-main/stock_pool_config.json'
+        self.db_path = db_path or './data/unified_stock_data.db'
+        self.predictions_db = './predictions.db'
+        self.stock_pool_path = './stock_pool_config.json'
         
         # 確保資料庫存在
         self._init_database()
