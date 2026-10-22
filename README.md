@@ -103,7 +103,7 @@ OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=gemma4:e4b
 ```
 
-### 4. 一鍵自檢環境狀態
+### 4. 一鍵自檢環境狀態 
 
 ```bash
 python main.py test
